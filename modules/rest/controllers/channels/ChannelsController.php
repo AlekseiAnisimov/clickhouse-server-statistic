@@ -283,7 +283,7 @@ class ChannelsController extends BaseController
         
         foreach ($data->rows as $key => $item) {
             $startChannels[$item['vcid']]['name'] = $userChannelsFormatedList[$item['vcid']];
-            $startChannels[$item['vcid']]['online'] = $item['cnt'];
+            $startChannels[$item['vcid']]['online'] = $item['value'];
         }
         
         return $this->asJson($startChannels);

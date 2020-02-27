@@ -205,6 +205,7 @@ use Tinderbox\ClickhouseBuilder\Query\From;
                 ])
                 ->from('agg_online_archive')
                 ->whereIn('vcid', $userChannels)
+                ->whereIn('app', self::appList())
                 ->where('day_begin', '>=', $dayBegin)
                 ->where('day_begin', '<=', $dayEnd)
                 ->where('evtp', '!=', 666666)
@@ -216,13 +217,12 @@ use Tinderbox\ClickhouseBuilder\Query\From;
     public static function getStartChannelsOfPartner($userChannels, $dayBegin, $dayEnd)
     {
         $query = self::find()
-                ->select(['vcid', raw('COUNT(*) as cnt')])
-                ->from('stat')
+                ->select(['vcid', raw('SUM(value) as value')])
+                ->from('agg_online_switch')
                 ->whereIn('vcid', $userChannels)
                 ->whereIn('app', self::appList())
                 ->where('day_begin', '>=', $dayBegin)
                 ->where('day_begin', '<=', $dayEnd)
-                ->where('action', '=', 'opening-channel')
                 ->groupBy(['vcid']);
 
         return self::execute($query);
