@@ -245,17 +245,13 @@ class ChannelsController extends BaseController
         foreach ($data as $key => $item) {
             
             $channelsData[$item['vcid']]['name'] = $userChannelsFormatedList[$item['vcid']];
-            $channelsData[$item['vcid']]['online'] = 0;
-            $channelsData[$item['vcid']]['archive'] = 0;
+
+            if ($item['evtp'] == 1) {
+                $channelsData[$item['vcid']]['online'] = $item['value'];
+            } 
             
-            foreach ($item['groupData'] as $groupData) {
-                if ($groupData[0] == 0) {
-                    $channelsData[$item['vcid']]['online'] = $groupData[1];
-                }
-                
-                if ($groupData[0] == 1) {
-                    $channelsData[$item['vcid']]['archive'] = $groupData[2];
-                }
+            if ($item['evtp'] == 0) {
+                $channelsData[$item['vcid']]['archive'] = $item['value'];
             }
         }
         

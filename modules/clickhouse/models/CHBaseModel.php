@@ -38,5 +38,14 @@ class CHBaseModel
         return self::execute($query)->getRows();
     }
 
+    public static function appList() : array
+    {
+        return [
+            'mejortvios',
+            'tv.mejor.mejortv',
+            'tv.limehd.mejor'
+        ];
+    }
+
     public final static function all() {}
 }

@@ -6,7 +6,7 @@ use app\modules\rest\helpers\DataHelper;
 use Tinderbox\ClickhouseBuilder\Query\Builder;
 use Tinderbox\ClickhouseBuilder\Query\From;
 
-class MonitChannels extends CHBaseModel
+    class MonitChannels extends CHBaseModel
 {
     public static function getChannelsViewDuration($app, $dayBegin, $dayEnd)
     {
@@ -200,28 +200,15 @@ class MonitChannels extends CHBaseModel
         $query = self::find()
                 ->select([
                     'vcid',
-                    raw('groupArray([toString(evtp), toString(ctnarch), toString(ctnonline)]) as groupData')
+                    'evtp',
+                    raw('sum(value) as value')
                 ])
-                ->from(function (From $from) use ($userChannels, $dayBegin, $dayEnd) {
-                    $from = $from->query();
-
-                    $from
-                    ->select([
-                        'vcid',
-                        'evtp',
-                        raw('countIf(evtp = 0) as ctnarch'),
-                        raw('countIf(evtp = 1) as ctnonline')
-                    ])
-                    ->from('stat')
-                    ->whereIn('vcid', $userChannels)
-                    ->where('day_begin', '>=', $dayBegin)
-                    ->where('day_begin', '<=', $dayEnd)
-                    ->where('adsst', '=', 'NULL')
-                    ->where('action', '!=', 'opening-channel')
-                    ->where('evtp', '!=', 666666)
-                    ->groupBy(['vcid', 'evtp']);
-                })
-                ->groupBy(['vcid']);
+                ->from('agg_online_archive')
+                ->whereIn('vcid', $userChannels)
+                ->where('day_begin', '>=', $dayBegin)
+                ->where('day_begin', '<=', $dayEnd)
+                ->where('evtp', '!=', 666666)
+                ->groupBy(['vcid', 'evtp']);
 
         return self::execute($query);
     }
@@ -232,6 +219,7 @@ class MonitChannels extends CHBaseModel
                 ->select(['vcid', raw('COUNT(*) as cnt')])
                 ->from('stat')
                 ->whereIn('vcid', $userChannels)
+                ->whereIn('app', self::appList())
                 ->where('day_begin', '>=', $dayBegin)
                 ->where('day_begin', '<=', $dayEnd)
                 ->where('action', '=', 'opening-channel')

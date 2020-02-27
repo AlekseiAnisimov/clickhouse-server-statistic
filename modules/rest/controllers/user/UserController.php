@@ -210,7 +210,7 @@ class UserController extends BaseController
         }
 
         $userChannels = UserChannels::findAll(['user_id' => $id]);
-        $nameChannels = (array) json_decode(file_get_contents('https://pl.iptv2021.com/api/v1/channels?access_token=r0ynhfybabufythekbn'));
+        $nameChannels = (array) json_decode(file_get_contents('https://vls.iptv2022.com/api/v1/channels?access_token=r0ynhfybabufythekbn'));
 
         $list = array_map(function($channel) use ($nameChannels) {
             $obj = new \stdClass();
