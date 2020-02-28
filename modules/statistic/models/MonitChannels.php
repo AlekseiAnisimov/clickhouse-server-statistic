@@ -186,6 +186,7 @@ use Tinderbox\ClickhouseBuilder\Query\From;
                 ])
                 ->from('stat')
                 ->whereIn('vcid', $userChannels)
+                ->whereIn('app', self::appList())
                 ->where('day_begin', '>=', $dayBegin)
                 ->where('day_begin', '<=', $dayEnd)
                 ->where('adsst', '=', 'NULL')
