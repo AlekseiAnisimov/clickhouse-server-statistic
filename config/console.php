@@ -30,6 +30,14 @@ $config = [
                 ],
             ],
         ],
+        'clickhouse' => [
+            'class' => 'app\modules\clickhouse\components\Connection',
+            'host' => '194.35.48.28',
+            'user' => 'default',
+            'pass' => 'gkfcnbrjdsq',
+            'db' => 'monit',
+            'port' => '8123'
+        ],
         'db' => $db,
     ],
     'params' => $params,
